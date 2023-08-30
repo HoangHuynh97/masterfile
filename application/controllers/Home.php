@@ -67,4 +67,29 @@ class Home extends CI_Controller {
 
     	echo json_encode($dataResult);
     }
+
+    public function getSearch()
+    {
+        $data = $this->input->post();
+        $this->db->like('name', $data['key']);
+        $this->db->or_like('game', $data['key']);
+        $getData = $this->db->get('tbl_file')->result_array();
+        if(count($getData) > 0) {
+            foreach ($getData as $key => $value) {
+                $dataResult[$key]['dataResult'] = [
+                            'id' => $value['ID'],
+                            'date_create' => $value['date_create'],
+                            'game' => $value['game'],
+                            'name' => $value['name'],
+                            'image' => $value['image'],
+                            'count' => $value['count'],
+                            'link_ads' => $value['link_ads'],
+                            'link_noads' => $value['link_noads']
+                        ];
+            }
+        } else {
+            $dataResult = [];
+        }
+        echo json_encode($dataResult);
+    }
 }

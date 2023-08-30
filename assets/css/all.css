@@ -345,6 +345,9 @@ a {
     -o-transition: all ease 0.5s;
     transition: all ease 0.5s;
 }
+.content-search.hide {
+    display: none;
+}
 .content-file.hide {
     display: none;
 }
@@ -420,6 +423,8 @@ a {
     border-top-left-radius: 20px;
 }
 .container--content-file-c-box-img img {
+    border-top-right-radius: 20px;
+    border-top-left-radius: 20px;
     width: 100%;
     height: 100%;
     -o-object-fit: cover;

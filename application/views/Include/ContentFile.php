@@ -5,11 +5,17 @@
 				<i class="fa-solid fa-magnifying-glass"></i>
 			</div>
 			<div class="container--content-search-box-input">
-				<input type="text" name="" placeholder="Tìm kiếm theo tên game, tên file,..." onchange="changeKey(); return false;">
+				<input type="text" id="key_search" placeholder="Tìm kiếm theo tên game, tên file,..." onchange="changeKey(); return false;">
 			</div>
 		</div>
 	</div>
 	<div class="container--content-file">
+		<div class="content-search hide">
+			<div class="container--content-file-title">
+				Kết quả tìm kiếm
+			</div>
+			<div class="add-result"></div>
+		</div>
 		<div class="content-detail hide">
 			<div class="call-back" onclick="callBack(); return false;">
 				<<< Quay lại
@@ -161,12 +167,14 @@
             $('.content-detail').find('.ads').attr('href', r.link_ads);
             $('.content-file').addClass('hide');
             $('.content-detail').removeClass('hide');
+            $('.content-search').addClass('hide');
         });
 	}
 
 	function callBack() {
 		$('.content-file').removeClass('hide');
         $('.content-detail').addClass('hide');
+        $('.content-search').addClass('hide');
 	}
 
 	function checkClick(type) {
@@ -200,10 +208,48 @@
 	}
 
 	function changeKey() {
-		Swal.fire({
-		  	icon: 'error',
-		  	title: 'MỆT',
-		  	text: 'Mệt! Mệt! Mệt!'
-		})
+		if($('#key_search').val() != '') {
+			$.ajax({
+	            url: "<?=base_url()?>home/getSearch",
+	            type: 'POST',
+	            dataType: 'html',
+	            data: {
+	                key: $('#key_search').val()
+	            }
+	        }).done(function(r) {
+	        	r = JSON.parse(r);
+	            var html = '';
+	            $.each(r, function( index, value ) {
+	  				html += '<div class="container--content-file-sort" onclick="get_link('+value.dataResult.id+'); return false;">\
+								<div class="container--content-file-sort-box">\
+									<div class="__sort-image">\
+										<img src="'+value.dataResult.image+'">\
+									</div>\
+									<div class="__sort-title">\
+										'+value.dataResult.name+'\
+									</div>\
+									<div class="__sort-date">\
+										#'+value.dataResult.date_create+'\
+									</div>\
+									<div class="__sort-count">\
+										<i class="fa-regular fa-circle-down"></i> '+value.dataResult.count+'\
+									</div>\
+									<div class="__sort-action">\
+										<i class="fa-solid fa-eye"></i>\
+									</div>\
+								</div>\
+							</div>';
+				});
+	            $('.add-result').html(html);
+
+	            $('.content-file').addClass('hide');
+		        $('.content-detail').addClass('hide');
+		        $('.content-search').removeClass('hide');
+	        });
+	    } else {
+	    	$('.content-file').removeClass('hide');
+	        $('.content-detail').addClass('hide');
+	        $('.content-search').addClass('hide')
+	    }
 	}
 </script>
