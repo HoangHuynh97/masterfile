@@ -1,4 +1,8 @@
 <div class="container--menu">
+	<div class="container--menu-mobile" onclick="getMenu(); return false;">
+		<i class="fa-solid fa-angles-right icon-right active"></i>
+		<i class="fa-solid fa-angles-left icon-left"></i>
+	</div>
 	<div class="container--menu-banner">
 		<div class="container--menu-banner-logo margin-bottom-20px">
 			<div class="logo"><img src="<?=base_url("assets/images/masterfile.png")?>"></div>
@@ -46,6 +50,17 @@
 </div>
 
 <script type="text/javascript">
+	function getMenu() {
+		if($('.container--menu').hasClass('show-mobile')) {
+			$('.container--menu').removeClass('show-mobile');
+			$('.icon-right').addClass('active');
+			$('.icon-left').removeClass('active');
+		} else {
+			$('.container--menu').addClass('show-mobile');
+			$('.icon-right').removeClass('active');
+			$('.icon-left').addClass('active');
+		}
+	}
 	function report() {
     	Swal.fire({
 		  	icon: 'error',

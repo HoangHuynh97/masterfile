@@ -487,11 +487,37 @@ a {
     text-transform: uppercase;
 }
 .call-back {
-    font-size: 18px;
+    display: inline-block;
+    background: #f00;
+    font-size: 16px;
     font-weight: bold;
-    color: #f00;
+    padding: 5px 10px;
+    color: #fff;
     cursor: pointer;
     user-select: none;
+    border-radius: 10px;
+}
+.call-back:hover {
+    opacity: 0.6;
+}
+.container--menu-mobile {
+    display: none;
+}
+.container--menu-mobile .icon-right, .container--menu-mobile .icon-left {
+    display: none;
+    cursor: pointer;
+    user-select: none;
+    position: absolute;
+    right: -45px;
+    top: 50px;
+    z-index: 9;
+    background: #f00;
+    color: #fff;
+    padding: 10px 10px;
+    border-radius: 5px;
+}
+.container--menu-mobile .icon-right.active, .container--menu-mobile .icon-left.active {
+    display: block !important;
 }
 body.swal2-height-auto {
     height: 100vh !important;
