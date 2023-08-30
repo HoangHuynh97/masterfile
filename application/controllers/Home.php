@@ -4,7 +4,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Home extends CI_Controller {
 	public function index()
 	{
-        $data['dataResult'] = $this->db->get('tbl_file', 0, 10)->result_array();
+        $data['search'] = '';
+        if($this->input->get('search') != '') {
+            $data['search'] = $this->input->get('search');
+        }
+        $this->db->order_by('ID', 'DESC');
+        $data['dataResult'] = $this->db->get('tbl_file', 10, 0)->result_array();
 
         $this->db->order_by('count', 'DESC');
         $data['dataResultCount'] = $this->db->get('tbl_file')->result_array();

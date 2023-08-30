@@ -207,6 +207,11 @@
 		}
 	}
 
+	$(document).ready(function(){
+	    $('#key_search').val('<?=$search?>');
+		changeKey();
+	});
+
 	function changeKey() {
 		if($('#key_search').val() != '') {
 			$.ajax({
