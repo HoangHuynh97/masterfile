@@ -37,6 +37,8 @@
 	}
 	.container--menu {
 		background: #fff;
+		-webkit-transition: all ease 0.5s;
+		-o-transition: all ease 0.5s;
 		transition: all ease 0.5s;
 		position: fixed;
 		left: -300px;
