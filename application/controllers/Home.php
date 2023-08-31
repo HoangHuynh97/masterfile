@@ -15,10 +15,6 @@ class Home extends CI_Controller {
         $data['dataResultCount'] = $this->db->get('tbl_file')->result_array();
 		$this->load->view('Home/Index', $data);
 	}
-	public function hoangadmin()
-	{
-		$this->load->view('Home/Admin');
-	}
 	public function saveData()
     {
         $data = $this->input->post();
