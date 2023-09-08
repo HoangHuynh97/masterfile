@@ -13,7 +13,7 @@ class Home extends CI_Controller {
 
         $this->db->order_by('count', 'DESC');
         $data['dataResultCount'] = $this->db->get('tbl_file')->result_array();
-		$this->load->view('Home/Index', $data);
+		$this->load->view('Spin/Index', $data);
 	}
 	public function saveData()
     {
