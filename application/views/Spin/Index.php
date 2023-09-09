@@ -23,6 +23,66 @@
 					</div>
 				</div>
 			</div>
+			<div class="line-spin"></div>
+			<div class="container--spin-body">
+				<div class="container--spin-body-list-member">
+					<div class="__list-member-title">
+						Chiến thần ăn hên
+					</div>
+					<div class="__list-member-table-thead">
+						<div class="__td" style="width: 60%;">
+							Thông tin
+						</div>
+						<div class="__td" style="width: 40%;">
+							Ngày nhận
+						</div>
+					</div>
+					<div class="__list-member-table-tbody">
+						<div class="__tbody-tr">
+							<div class="__td" style="width: 60%;">
+								Thông tin
+							</div>
+							<div class="__td" style="width: 40%;">
+								Ngày nhận
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="container--spin-body-content">
+					<div class="__title-number-spin">
+						Số lượt còn lại: <span>666</span>
+					</div>
+					<div class="vongquay">
+				        <canvas id="canvas" width="300" height="300" data-responsiveMinWidth="150" data-responsiveScaleHeight="true" data-responsiveMargin="50">
+				        </canvas>
+				        <div id="batdauquay" class="nutbatdau"></div>
+				        <div onClick="startSpin();" class="nutquay"></div>
+				    </div>
+				</div>
+				<div class="container--spin-body-list-member">
+					<div class="__list-member-title">
+						Chiến thần ăn hên
+					</div>
+					<div class="__list-member-table-thead">
+						<div class="__td" style="width: 60%;">
+							Thông tin
+						</div>
+						<div class="__td" style="width: 40%;">
+							Ngày nhận
+						</div>
+					</div>
+					<div class="__list-member-table-tbody">
+						<div class="__tbody-tr">
+							<div class="__td" style="width: 60%;">
+								Thông tin
+							</div>
+							<div class="__td" style="width: 40%;">
+								Ngày nhận
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 		<!-- end -->
 	</div>

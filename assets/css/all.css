@@ -674,4 +674,74 @@ body.swal2-height-auto {
     text-transform: uppercase;
     font-weight: bold;
 }
+.line-spin {
+    width: 100%;
+    height: 1px;
+    border: 1px solid #ffe4e4;
+    margin-bottom: 10px;
+}
+.container--spin-body {
+    width: 100%;
+    height: calc(100% - 164px);
+    display: grid;
+    grid-template-columns: 25% auto 25%;
+}
+.container--spin-body-list-member {
+    height: 100%;
+    overflow: auto;
+}
+.__list-member-title {
+    text-align: center;
+    font-weight: bold;
+    text-transform: uppercase;
+    border-bottom: 1px solid #ddd;
+    margin: 5px 25px;
+}
+.__list-member-table-thead {
+    display: flex;
+    margin: 5px 10px;
+    font-weight: bold;
+    font-style: italic;
+    border-bottom: 1px solid #000;
+}
+.__list-member-table-tbody {
+    margin: 5px 10px;
+    overflow: auto;
+    height: calc(100% - 75px);
+}
+.__tbody-tr {
+    display: flex;
+    font-style: italic;
+}
+.container--spin-body-content {
+    height: 100%;
+    overflow: auto;
+    border-left: 2px solid #ffd0d0;
+    border-right: 2px solid #ffd0d0;
+}
+.vongquay {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+.nutbatdau{
+    background-image: url('../images/contro.png');
+    position: absolute;
+    width:180px;
+    height: 180px;
+    z-index: 99;
+}
+.nutquay {
+    width: 70px;
+    height: 70px;
+    position: absolute;
+    cursor: pointer;
+    z-index: 999;
+}
+.__title-number-spin {
+    text-align: center;
+    font-weight: bold;
+    color: #f00;
+    margin-bottom: 15px;
+}
 /*====end====*/
