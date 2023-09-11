@@ -10,7 +10,7 @@
 					<br>
 					*Nhận thêm 10 lượt quay bằng cách nhấn vào nút xem quảng cáo bên dưới và truy cập vào liên kết cuối cùng để nhận code. (Code có dạng: XXXXXXXXXX).
 				</div>
-				<a href="<?=$dataResultList?>" class="__spin-header-button-ads" id="ads-get-code" target="_blank" onclick="create_code('<?=$dataResultListCheckLock?>'); return false;">
+				<a href="<?=$dataResultList?>" class="__spin-header-button-ads" id="ads-get-code" target="_blank" onclick="create_code(); return false;">
 					Xem quảng cáo
 				</a>
 				<div class="__spin-header-content">
@@ -19,6 +19,7 @@
 					</div>
 					<div class="__spin-header-content-input">
 						<input type="text" id="input-code" autocomplete="off">
+						<input type="hidden" id="input-check-lock" value="<?=$dataResultListCheckLock?>">
 					</div>
 					<div class="__spin-header-content-button-submit" onclick="submit_code(); return false;">
 						Nhận lượt quay
@@ -53,17 +54,31 @@
 					</div>
 				</div>
 				<div class="container--spin-body-content">
-					<div class="__title-number-spin">
-						Tỉ lệ quay trúng: 1% / Số lượng key korepi: 6
-						<br>
-						Số lượt quay còn lại: <span id="count_spin"><?=$dataResultCount?></span>
-					</div>
-					<div class="vongquay">
-				        <canvas id="canvas" width="300" height="300" data-responsiveMinWidth="150" data-responsiveScaleHeight="true" data-responsiveMargin="50">
-				        </canvas>
-				        <div id="batdauquay" class="nutbatdau"></div>
-				        <div onClick="startSpin();" class="nutquay"></div>
-				    </div>
+					<?php if(count($dataResultSuccess) >= $limit_key) { ?>
+						<div class="__spin-header-title-note" style="text-align: center;">
+							=======HẾT SẠCH KEY=======
+							<br>
+							Đã có <span style="font-size: 30px"><?=$limit_key?></span> chiến thần quay trúng nên event sẽ tạm dừng.
+							<br>
+							Thời gian mở lại vào ngày <span style="font-size: 30px"><?=$limit_date?></span> khi key được reset.
+							<br>
+							*Tránh tình trạng những người đầu tiên quay quá nhiều, không còn phần cho người đến sau nên event sau sẽ giới hạn chỉ được xem quảng cáo 3 lần (tối đa 40 lượt quay/1 ngày).
+							<br>
+							==========================
+						</div>
+					<?php } else { ?>
+						<div class="__title-number-spin">
+							Tỉ lệ quay trúng: 1% / Số lượng key korepi: 6
+							<br>
+							Số lượt quay còn lại: <span id="count_spin"><?=$dataResultCount?></span>
+						</div>
+						<div class="vongquay">
+					        <canvas id="canvas" width="300" height="300" data-responsiveMinWidth="150" data-responsiveScaleHeight="true" data-responsiveMargin="50">
+					        </canvas>
+					        <div id="batdauquay" class="nutbatdau"></div>
+					        <div onClick="startSpin();" class="nutquay"></div>
+					    </div>
+					<?php } ?>
 				</div>
 				<div class="container--spin-body-list-member">
 					<div class="__list-member-title">
@@ -3222,14 +3237,17 @@ function alertPrize(indicatedSegment) {
   theWheel.draw();
   wheelSpinning = false;
 }
-function create_code(check_lock) {
+function create_code() {
   $.ajax({
-      url: "<?=base_url()?>home/create_code/"+check_lock,
+      url: "<?=base_url()?>home/create_code/"+$('#input-check-lock').val(),
       type: 'POST',
       dataType: 'html',
       data: {}
   }).done(function(r) {
     window.open($('#ads-get-code').attr('href'), '_blank');
+    r = JSON.parse(r);
+	$('#ads-get-code').attr('href', r.dataResultList);
+	$('#input-check-lock').val(r.dataResultListCheckLock)
   });
 }
 function submit_code() {

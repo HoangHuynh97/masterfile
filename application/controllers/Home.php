@@ -123,6 +123,9 @@ class Home extends CI_Controller {
             $data['dataResultCount'] = 10;
         }
 
+        //change this
+        $data['limit_key'] = 6;
+        $data['limit_date'] = '17/09/2023';
         $data['dataResultSuccess'] = $this->db->get('tbl_success')->result_array();
         
         $list = ['https://web1s.io/Bh4VSWnvKW','https://web1s.io/QzBQgffkwp','https://web1s.io/gEBz4Fn2Hz','https://web1s.io/3HA09zFxqk','https://web1s.io/EthGRSicYi','https://web1s.io/ctO42dG5gt','https://web1s.io/wmOo5W6gYg','https://web1s.io/eQQgbzOd2i'];
@@ -137,13 +140,37 @@ class Home extends CI_Controller {
     public function create_code($check_lock = '')
     {
         $ip_client = $this->get_client_ip();
+
+        $this->db->where('IP', $ip_client);
+        $dataResultCount = $this->db->get('tbl_code')->result_array();
+        if(count($dataResultCount) > 0) {
+            $this->db->where('IP', $ip_client);
+            $this->db->where('is_use', 0);
+            $this->db->delete('tbl_code');
+        }
+
+        date_default_timezone_set('Asia/Ho_Chi_Minh');
+        $timestamp = time();
+        $current_date = date("Y-m-d", $timestamp);
         $randomString = $this->generateRandomString();
         $dataInsert = [
             'check_lock' => $check_lock,
             'IP' => $ip_client,
+            'date' => $current_date,
             'key_security' => $randomString
         ];
         $this->db->insert('tbl_code', $dataInsert);
+
+        $list = ['https://web1s.io/Bh4VSWnvKW','https://web1s.io/QzBQgffkwp','https://web1s.io/gEBz4Fn2Hz','https://web1s.io/3HA09zFxqk','https://web1s.io/EthGRSicYi','https://web1s.io/ctO42dG5gt','https://web1s.io/wmOo5W6gYg','https://web1s.io/eQQgbzOd2i'];
+        $listCheckLock = ['HKL7OI2','OTB25TG','IIDF56G','ELKM56T','NMEDA92','RKLM3T0','QSM01R6','ZG21LIJ'];
+        $randomKey = rand(0,7);
+        $dataResultList = $list[$randomKey];
+        $dataResultListCheckLock = $listCheckLock[$randomKey];
+        $rep = [
+                "dataResultList" => $dataResultList,
+                "dataResultListCheckLock" => $dataResultListCheckLock,
+            ];
+        echo json_encode($rep);
     }
 
     public function get_code($check_lock = '')
@@ -191,20 +218,35 @@ class Home extends CI_Controller {
                 $this->db->where('IP', $ip_client);
                 $this->db->where('key_security', $data['input_code']);
                 $this->db->update('tbl_code', ['is_use' => 1]);
+                $success = true;
+                $message = 'Đã cộng thêm 10 lượt quay!';
             } else {
                 $countSpin = $getDataSpin[0]['spin'] + 10;
                 $dataUpdate = [
                     'spin' => $countSpin
                 ];
-                $this->db->where('IP', $ip_client);
-                $this->db->update('tbl_spin', $dataUpdate);
+
+                date_default_timezone_set('Asia/Ho_Chi_Minh');
+                $timestamp = time();
+                $current_date = date("Y-m-d", $timestamp);
 
                 $this->db->where('IP', $ip_client);
-                $this->db->where('key_security', $data['input_code']);
-                $this->db->update('tbl_code', ['is_use' => 1]);
+                $this->db->where('date', $current_date);
+                $getDataCode = $this->db->get('tbl_code')->result_array();
+                if(count($getDataCode) <= 3) {
+                    $this->db->where('IP', $ip_client);
+                    $this->db->update('tbl_spin', $dataUpdate);
+
+                    $this->db->where('IP', $ip_client);
+                    $this->db->where('key_security', $data['input_code']);
+                    $this->db->update('tbl_code', ['is_use' => 1]);
+                    $success = true;
+                    $message = 'Đã cộng thêm 10 lượt quay!';
+                } else {
+                    $success = false;
+                    $message = 'Bạn đã đến giới hạn nhận thêm lượt quay!';
+                }
             }
-            $success = true;
-            $message = 'Đã cộng thêm 10 lượt quay!';
         } else {
             $success = false;
             $message = 'Mã code không hợp lệ!';
@@ -280,7 +322,7 @@ class Home extends CI_Controller {
             $success = false;
             $key = '';
             $message = '';
-
+            //change this
             $countDataSuccess = $this->db->get('tbl_success')->result_array();
             if($countSpin < 0) {
                 $localtion = 0;
