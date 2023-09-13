@@ -2,6 +2,29 @@
 <body class="container--page">
 	<div id="particles-js"></div>
 	<div class="container--body" style="padding: 10px; overflow: auto;">
+		<div style="width: 100%; margin: 10px;">
+			<div style="width: 100%; text-align: center;">
+				==================EVENT==================
+			</div>
+			<div style="display: flex; align-items: center; justify-content: center;">
+				<span>Limit Key</span>
+				<input type="text" id="input_limitkey" value="<?=$dataSetting_key?>" autocomplete="off" style="margin: 0px 10px;">
+				<div style="background: #f00; padding: 5px 10px; border-radius: 5px; color: #fff;" onclick="changeInput('key'); return false;">OK</div>
+			</div>
+			<div style="display: flex; align-items: center; justify-content: center; margin-top: 10px;">
+				<span>Limit Date</span>
+				<input type="text" id="input_limitdate" value="<?=$dataSetting_date?>" autocomplete="off" style="margin: 0px 10px;">
+				<div style="background: #f00; padding: 5px 10px; border-radius: 5px; color: #fff;" onclick="changeInput('date'); return false;">OK</div>
+			</div>
+			<div style="display: flex; align-items: center; justify-content: center; margin-top: 10px;">
+				<span>Limit Spin</span>
+				<input type="text" id="input_limitspin" value="<?=$dataSetting_spin?>" autocomplete="off" style="margin: 0px 10px;">
+				<div style="background: #f00; padding: 5px 10px; border-radius: 5px; color: #fff;" onclick="changeInput('spin'); return false;">OK</div>
+			</div>
+			<div style="width: 100%; text-align: center;">
+				=========================================
+			</div>
+		</div>
 		<button style="margin: 10px;" class="btn btn-primary" onclick="showModal(); return false;">Thêm mới</button>
 		<button style="margin: 10px;" class="btn btn-primary" onclick="getDataSql(); return false;">Tải data</button>
 		<div class="container--content-file-title" style="margin: 10px;">
@@ -221,6 +244,49 @@
 		        text: 'Run!'
 		    })
 	    });
+	}
+
+	function changeInput(type) {
+		if(type == 'key') {
+			$.ajax({
+		        url: "<?=base_url()?>adminh/changeInput",
+		        type: 'POST',
+		        dataType: 'html',
+		        data: {key_val: 'key', val: $('#input_limitkey').val()}
+		    }).done(function(r) {
+		    	Swal.fire({
+			        icon: 'success',
+			        title: 'Ok',
+			        text: 'Run!'
+			    })
+		    });
+		} else if(type == 'date') {
+			$.ajax({
+		        url: "<?=base_url()?>adminh/changeInput",
+		        type: 'POST',
+		        dataType: 'html',
+		        data: {key_val: 'date', val: $('#input_limitdate').val()}
+		    }).done(function(r) {
+		    	Swal.fire({
+			        icon: 'success',
+			        title: 'Ok',
+			        text: 'Run!'
+			    })
+		    });
+		} else if(type == 'spin') {
+			$.ajax({
+		        url: "<?=base_url()?>adminh/changeInput",
+		        type: 'POST',
+		        dataType: 'html',
+		        data: {key_val: 'spin', val: $('#input_limitspin').val()}
+		    }).done(function(r) {
+		    	Swal.fire({
+			        icon: 'success',
+			        title: 'Ok',
+			        text: 'Run!'
+			    })
+		    });
+		}
 	}
 </script>
 <?php echo loadFooter(); ?>

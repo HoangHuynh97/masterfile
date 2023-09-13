@@ -9,11 +9,21 @@ class Adminh extends CI_Controller {
         } else if($this->input->post('keySecurity') == 'hoang-deptrai') {
             $this->db->order_by('ID', 'DESC');
             $data['dataResult'] = $this->db->get('tbl_file')->result_array();
+            $data['dataSetting_key'] = $this->getValueSetting('key');
+            $data['dataSetting_date'] = $this->getValueSetting('date');
+            $data['dataSetting_spin'] = $this->getValueSetting('spin');
             $this->load->view('Admin/Index', $data);
         } else {
             $this->load->view('Admin/Check');
         }
 	}
+
+    public function getValueSetting($key = '')
+    {
+        $this->db->where('key_val', $key);
+        $val = $this->db->get('tbl_setting')->result_array();
+        return $val[0]['val'];
+    }
 
     public function showModalEdit()
     {
@@ -87,5 +97,16 @@ class Adminh extends CI_Controller {
         $this->load->helper('file');
         //write_file('/var/www/html/masterfile/assets/EventBackup/mybackup.sql', $backup);
         write_file('assets/EventBackup/mybackup.sql', $backup);
+    }
+
+    public function changeInput()
+    {
+        $data = $this->input->post();
+
+        $dataInsert = [
+            'val' => $data['val']
+        ];
+        $this->db->where('key_val', $data['key_val']);
+        $this->db->update('tbl_setting', $dataInsert);
     }
 }

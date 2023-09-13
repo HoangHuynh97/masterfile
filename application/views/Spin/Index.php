@@ -68,7 +68,7 @@
 						</div>
 					<?php } else { ?>
 						<div class="__title-number-spin">
-							Tỉ lệ quay trúng: 1% / Số lượng key korepi: 6
+							Tỉ lệ quay trúng: 1% / Số lượng key korepi: <?=$limit_key?>
 							<br>
 							Số lượt quay còn lại: <span id="count_spin"><?=$dataResultCount?></span>
 						</div>

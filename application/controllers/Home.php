@@ -13,6 +13,9 @@ class Home extends CI_Controller {
 
         $this->db->order_by('count', 'DESC');
         $data['dataResultCount'] = $this->db->get('tbl_file')->result_array();
+
+        $data['limit_key'] = $this->getValueSetting('key');
+        $data['limit_date'] = $this->getValueSetting('date');
 		$this->load->view('Home/Index', $data);
 	}
 	public function saveData()
@@ -110,6 +113,13 @@ class Home extends CI_Controller {
         }
     }
 
+    public function getValueSetting($key = '')
+    {
+        $this->db->where('key_val', $key);
+        $val = $this->db->get('tbl_setting')->result_array();
+        return $val[0]['val'];
+    }
+
     public function spin()
     {
         $data['search'] = '';
@@ -122,10 +132,9 @@ class Home extends CI_Controller {
         } else {
             $data['dataResultCount'] = 10;
         }
-
         //change this
-        $data['limit_key'] = 6;
-        $data['limit_date'] = '17/09/2023';
+        $data['limit_key'] = $this->getValueSetting('key');
+        $data['limit_date'] = $this->getValueSetting('date');
         $data['dataResultSuccess'] = $this->db->get('tbl_success')->result_array();
         
         $list = ['https://web1s.io/Bh4VSWnvKW','https://web1s.io/QzBQgffkwp','https://web1s.io/gEBz4Fn2Hz','https://web1s.io/3HA09zFxqk','https://web1s.io/EthGRSicYi','https://web1s.io/ctO42dG5gt','https://web1s.io/wmOo5W6gYg','https://web1s.io/eQQgbzOd2i'];
@@ -316,13 +325,15 @@ class Home extends CI_Controller {
                 $this->db->where('IP', $ip_client);
                 $this->db->update('tbl_spin', $dataUpdate);
             }
-            $random1 = rand(1,100);
-            $random2 = rand(1,100);
+            $random1 = rand(1,150);
+            $random2 = rand(1,150);
             $localtion = 0;
             $success = false;
             $key = '';
             $message = '';
             //change this
+            $dataSetting_spin = $this->getValueSetting('spin');
+
             $countDataSuccess = $this->db->get('tbl_success')->result_array();
             if($countSpin < 0) {
                 $localtion = 0;
@@ -330,7 +341,7 @@ class Home extends CI_Controller {
                 $key = '0';
                 $spin = $countSpin < 0 ? 0 : $countSpin;
                 $message = 'Bạn đã dùng hết lượt quay, nhận thêm bằng cách xem quảng cáo!';
-            } else if($random1 == $random2 && count($countDataSuccess) < 2) {
+            } else if($random1 == $random2 && count($countDataSuccess) < $dataSetting_spin) {
                 $localtion = rand(30,300);
                 $success = true;
                 $key = $this->generateRandomString();
