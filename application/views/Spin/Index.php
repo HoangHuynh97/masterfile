@@ -1,4 +1,19 @@
 <?php echo loadHeader(); ?>
+<style type="text/css">
+    @media only screen and (max-height: 600px) {
+        .event-get-key {
+            display: none;
+        }
+        .container--page {
+            height: 800px;
+        }
+    }
+    @media only screen and (max-width: 500px) {
+        .event-get-key {
+            display: none;
+        }
+    }
+</style>
 <body class="container--page">
 	<div id="particles-js"></div>
 	<div class="container--body">
@@ -68,9 +83,15 @@
 						</div>
 					<?php } else { ?>
 						<div class="__title-number-spin">
-							Tỉ lệ quay trúng: 1% / Số lượng key korepi: <?=$limit_key?>
+							ĐỂ EVENT DIỄN RA LIÊN TỤC NÊN 1 KEY CÓ HẠN DÙNG 3 NGÀY.
 							<br>
-							Số lượt quay còn lại: <span id="count_spin"><?=$dataResultCount?></span>
+							Số lượt quay còn lại: <span id="count_spin"><?=$dataResultCount?></span>.
+                            <br>
+                            Tỉ lệ quay trúng: 1%. Dùng 30 lượt quay trong 1 lần sẽ nâng lên 5%.
+                            <br>
+                            <input type="checkbox" id="check_30spin" style="width: 20px; height: 20px; margin-top: 5px; margin-right: 5px;"> DÙNG 30 LƯỢT QUAY TRONG 1 LẦN (Tăng tỉ lệ lên 5%)
+                            <br>
+                            <input type="checkbox" id="check_skip" style="width: 20px; height: 20px; margin-top: 5px; margin-right: 5px;"> BỎ QUA HOẠT ẢNH
 						</div>
 						<div class="vongquay">
 					        <canvas id="canvas" width="300" height="300" data-responsiveMinWidth="150" data-responsiveScaleHeight="true" data-responsiveMargin="50">
@@ -3176,104 +3197,189 @@ function laypower() {
 var key, message = '';
 var success = false;
 function startSpin() {
-  // Nút quay không nhấp được khi đang chạy
-  if (wheelSpinning == false) {
+    // Nút quay không nhấp được khi đang chạy
+    if (wheelSpinning == false) {
+        wheelSpinning = true;
+        if($('#check_30spin').is(":checked")) {
+            if($('#check_skip').is(":checked")) {
+                $.ajax({
+                    url: "<?=base_url()?>home/getData30Spin",
+                    type: 'POST',
+                    dataType: 'html',
+                    data: {}
+                }).done(function(r) {
+                    r = JSON.parse(r);
+                    ls = r.localtion;
+                    success = r.success;
+                    key = r.key;
+                    spin = r.spin;
+                    message = r.message;
+                    if(key == '0') {
+                        Swal.fire({
+                            icon: 'error',
+                            title: '!!!',
+                            text: message
+                        });
+                        theWheel.rotationAngle = 0;
+                        theWheel.draw();
+                        wheelSpinning = false;
+                    } else {
+                        $('#count_spin').html(spin);
+                        alertPrize('');
+                    }
+                });
+            } else {
+                $.ajax({
+                    url: "<?=base_url()?>home/getData30Spin",
+                    type: 'POST',
+                    dataType: 'html',
+                    data: {}
+                }).done(function(r) {
+                    r = JSON.parse(r);
+                    ls = r.localtion;
+                    success = r.success;
+                    key = r.key;
+                    spin = r.spin;
+                    message = r.message;
+                    if(key == '0') {
+                        Swal.fire({
+                            icon: 'error',
+                            title: '!!!',
+                            text: message
+                        });
+                        theWheel.rotationAngle = 0;
+                        theWheel.draw();
+                        wheelSpinning = false;
+                    } else {
+                        $('#count_spin').html(spin);
+                        theWheel.animation.spins = wheelPower;
+                        theWheel.startAnimation();
+                    }
+                });
+            }
+        } else {
+            if($('#check_skip').is(":checked")) {
+                $.ajax({
+                    url: "<?=base_url()?>home/getDataSpin",
+                    type: 'POST',
+                    dataType: 'html',
+                    data: {}
+                }).done(function(r) {
+                    r = JSON.parse(r);
+                    ls = r.localtion;
+                    success = r.success;
+                    key = r.key;
+                    spin = r.spin;
+                    message = r.message;
+                    if(key == '0') {
+                        Swal.fire({
+                            icon: 'error',
+                            title: '!!!',
+                            text: message
+                        });
+                        theWheel.rotationAngle = 0;
+                        theWheel.draw();
+                        wheelSpinning = false;
+                    } else {
+                        $('#count_spin').html(spin);
+                        alertPrize('');
+                    }
+                });
+            } else {
+                $.ajax({
+                    url: "<?=base_url()?>home/getDataSpin",
+                    type: 'POST',
+                    dataType: 'html',
+                    data: {}
+                }).done(function(r) {
+                    r = JSON.parse(r);
+                    ls = r.localtion;
+                    success = r.success;
+                    key = r.key;
+                    spin = r.spin;
+                    message = r.message;
+                    if(key == '0') {
+                        Swal.fire({
+                            icon: 'error',
+                            title: '!!!',
+                            text: message
+                        });
+                        theWheel.rotationAngle = 0;
+                        theWheel.draw();
+                        wheelSpinning = false;
+                    } else {
+                        $('#count_spin').html(spin);
+                        theWheel.animation.spins = wheelPower;
+                        theWheel.startAnimation();
+                    }
+                });
+            }
+        }
+    }
+}
+function alertPrize(indicatedSegment) {
+    if(success == false) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Hãy thử lại!',
+            text: message
+        })
+    } else {
+        Swal.fire({
+            icon: 'success',
+            title: 'WOW! WOW! WOW!',
+            text: message
+        });
+        $('.__list-member-table-tbody').append('<div class="__tbody-tr">\
+                                                  <div class="__td" style="width: 60%;">\
+                                                    Loading...\
+                                                  </div>\
+                                                  <div class="__td" style="width: 40%;">\
+                                                    Loading...\
+                                                  </div>\
+                                                </div>');
+    }
+    theWheel.rotationAngle = 0;
+    theWheel.draw();
+    wheelSpinning = false;
+}
+function create_code() {
     $.ajax({
-        url: "<?=base_url()?>home/getDataSpin",
+        url: "<?=base_url()?>home/create_code/"+$('#input-check-lock').val(),
         type: 'POST',
         dataType: 'html',
         data: {}
     }).done(function(r) {
-      r = JSON.parse(r);
-      ls = r.localtion;
-      success = r.success;
-      key = r.key;
-      spin = r.spin;
-      message = r.message;
-      if(key == '0') {
-        Swal.fire({
-            icon: 'error',
-            title: '!!!',
-            text: message
-        })
-      } else {
-        $('#count_spin').html(spin);
-        // Dựa trên mức công suất được chọn, hãy điều chỉnh số vòng quay cho bánh xe, càng nhiều lần
-        // để xoay với thời lượng của hình ảnh động thì bánh xe quay càng nhanh.
-        theWheel.animation.spins = wheelPower;
-        // Bắt đầu quay bằng cách gọi startAnimation.
-        theWheel.startAnimation();
-
-        // Đặt thành true để không thể thay đổi nguồn và bật nút quay lại trong khi
-        // hình ảnh động hiện tại. Người dùng sẽ phải thiết lập lại trước khi quay lại.
-        wheelSpinning = true;
-      }
+        window.open($('#ads-get-code').attr('href'), '_blank');
+        r = JSON.parse(r);
+    	$('#ads-get-code').attr('href', r.dataResultList);
+    	$('#input-check-lock').val(r.dataResultListCheckLock)
     });
-  }
-}
-function alertPrize(indicatedSegment) {
-  if(success == false) {
-    Swal.fire({
-        icon: 'error',
-        title: 'Hãy thử lại!',
-        text: message
-    })
-  } else {
-    Swal.fire({
-        icon: 'success',
-        title: 'WOW! WOW! WOW!',
-        text: message
-    });
-    $('.__list-member-table-tbody').append('<div class="__tbody-tr">\
-                                              <div class="__td" style="width: 60%;">\
-                                                Loading...\
-                                              </div>\
-                                              <div class="__td" style="width: 40%;">\
-                                                Loading...\
-                                              </div>\
-                                            </div>');
-  }
-  theWheel.rotationAngle = 0;
-  theWheel.draw();
-  wheelSpinning = false;
-}
-function create_code() {
-  $.ajax({
-      url: "<?=base_url()?>home/create_code/"+$('#input-check-lock').val(),
-      type: 'POST',
-      dataType: 'html',
-      data: {}
-  }).done(function(r) {
-    window.open($('#ads-get-code').attr('href'), '_blank');
-    r = JSON.parse(r);
-	$('#ads-get-code').attr('href', r.dataResultList);
-	$('#input-check-lock').val(r.dataResultListCheckLock)
-  });
 }
 function submit_code() {
-  $.ajax({
-      url: "<?=base_url()?>home/submit_code",
-      type: 'POST',
-      dataType: 'html',
-      data: {input_code: $('#input-code').val()}
-  }).done(function(r) {
-    r = JSON.parse(r);
-    if(r.success == false) {
-      Swal.fire({
-          icon: 'error',
-          title: '!!!',
-          text: r.message
-      })
-    } else {
-      Swal.fire({
-          icon: 'success',
-          title: '!!!',
-          text: r.message
-      });
-      var c = Number($('#count_spin').html()) + 10;
-      $('#count_spin').html(c);
-    }
-  });
+        $.ajax({
+        url: "<?=base_url()?>home/submit_code",
+        type: 'POST',
+        dataType: 'html',
+        data: {input_code: $('#input-code').val()}
+    }).done(function(r) {
+        r = JSON.parse(r);
+        if(r.success == false) {
+            Swal.fire({
+                icon: 'error',
+                title: '!!!',
+                text: r.message
+            })
+        } else {
+            Swal.fire({
+                icon: 'success',
+                title: '!!!',
+                text: r.message
+            });
+            var c = Number($('#count_spin').html()) + 10;
+            $('#count_spin').html(c);
+        }
+    });
 }
 // end
 </script>

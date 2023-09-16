@@ -340,13 +340,96 @@ class Home extends CI_Controller {
                 $success = false;
                 $key = '0';
                 $spin = $countSpin < 0 ? 0 : $countSpin;
-                $message = 'Bạn đã dùng hết lượt quay, nhận thêm bằng cách xem quảng cáo!';
+                $message = 'Không đủ lượt quay, nhận thêm bằng cách xem quảng cáo!';
             } else if($random1 == $random2 && count($countDataSuccess) < $dataSetting_spin) {
                 $localtion = rand(30,300);
                 $success = true;
                 $key = $this->generateRandomString();
                 $spin = $countSpin < 0 ? 0 : $countSpin;
-                $message = 'Mã bảo vệ của bạn là: ' . $key . ', gửi mã này cho mình qua Telegram để nhận key!';
+                $message = 'Mã bảo vệ của bạn là: ' . $key . ', gửi mã này cho mình qua Telegram: t.me/mastergames97 để nhận key!';
+                date_default_timezone_set('Asia/Ho_Chi_Minh');
+                $timestamp2 = time();
+                $current_date2 = date("Y-m-d", $timestamp2);
+                $dataInsertKey = [
+                    'IP' => $ip_client,
+                    'date' => $current_date2,
+                    'key_security' => $key
+                ];
+                $this->db->insert('tbl_success', $dataInsertKey);
+            } else {
+                $localtion = rand(1,10);
+                $success = false;
+                $key = '';
+                $spin = $countSpin < 0 ? 0 : $countSpin;
+                $message = 'Tạch Tạch Tạch Tạch Tạch Tạch!';
+            }
+        } else {
+            $localtion = rand(1,10);
+            $success = false;
+            $key = '';
+            $spin = 0;
+            $message = 'Có gì đó không đúng, hãy thử tải lại trình duyệt!';
+        }
+        $rep = [
+                "localtion" => $localtion,
+                "success" => $success,
+                "key" => $key,
+                "spin" => $spin,
+                "message" => $message,
+            ];
+        echo json_encode($rep);
+    }
+
+    public function getData30Spin()
+    {
+        $ip_client = $this->get_client_ip();
+        if($ip_client != '' && $ip_client != 'UNKNOWN') {
+            $this->db->where('IP', $ip_client);
+            $getDataSpin = $this->db->get('tbl_spin')->result_array();
+            if(count($getDataSpin) == 0) {
+                date_default_timezone_set('Asia/Ho_Chi_Minh');
+                $timestamp = time();
+                $current_date = date("Y-m-d", $timestamp);
+                $dataInsert = [
+                    'IP' => $ip_client,
+                    'date' => $current_date,
+                    'spin' => 10
+                ];
+                $this->db->insert('tbl_spin', $dataInsert);
+            }
+
+            $this->db->where('IP', $ip_client);
+            $checkDataSpin = $this->db->get('tbl_spin')->result_array();
+            $countSpin = $checkDataSpin[0]['spin'] - 30;
+            if($countSpin >= 0) {
+                $dataUpdate = [
+                    'spin' => $countSpin
+                ];
+                $this->db->where('IP', $ip_client);
+                $this->db->update('tbl_spin', $dataUpdate);
+            }
+            $random1 = rand(1,100);
+            $random2 = rand(1,100);
+            $localtion = 0;
+            $success = false;
+            $key = '';
+            $message = '';
+            //change this
+            $dataSetting_spin = $this->getValueSetting('spin');
+
+            $countDataSuccess = $this->db->get('tbl_success')->result_array();
+            if($countSpin < 0) {
+                $localtion = 0;
+                $success = false;
+                $key = '0';
+                $spin = $countSpin < 0 ? 0 : $countSpin;
+                $message = 'Không đủ lượt quay, nhận thêm bằng cách xem quảng cáo!';
+            } else if($random1 == $random2 && count($countDataSuccess) < $dataSetting_spin) {
+                $localtion = rand(30,300);
+                $success = true;
+                $key = $this->generateRandomString();
+                $spin = $countSpin < 0 ? 0 : $countSpin;
+                $message = 'Mã bảo vệ của bạn là: ' . $key . ', gửi mã này cho mình qua Telegram: t.me/mastergames97 để nhận key!';
                 date_default_timezone_set('Asia/Ho_Chi_Minh');
                 $timestamp2 = time();
                 $current_date2 = date("Y-m-d", $timestamp2);

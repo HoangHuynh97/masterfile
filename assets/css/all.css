@@ -774,6 +774,7 @@ body.swal2-height-auto {
     border-right: 2px solid #ffd0d0;
 }
 .vongquay {
+    position: relative;
     display: -webkit-box;
     display: -ms-flexbox;
     display: flex;

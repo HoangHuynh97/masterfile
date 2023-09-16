@@ -109,18 +109,5 @@
   },
   "retina_detect": true
 });
-
-
-
-
-  $(document).ready(function(){
-    if($(window).width() < 400) {
-      Swal.fire({
-          icon: 'error',
-          title: 'MỆT',
-          text: 'Chưa hỗ trợ giao diện cho điện thoại! Update sau!'
-      })
-    }
-  });
 </script>
 </html>
