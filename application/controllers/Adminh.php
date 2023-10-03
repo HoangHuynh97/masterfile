@@ -37,7 +37,8 @@ class Adminh extends CI_Controller {
                         'name' => $getData[0]['name'],
                         'image' => $getData[0]['image'],
                         'link_ads' => $getData[0]['link_ads'],
-                        'link_noads' => $getData[0]['link_noads']
+                        'link_noads' => $getData[0]['link_noads'],
+                        'pin' => $getData[0]['pin']
                     ];
         echo json_encode($dataResult);
     }
@@ -52,7 +53,8 @@ class Adminh extends CI_Controller {
                 'name' => $data['name'],
                 'image' => $data['image'],
                 'link_ads' => $data['link_ads'],
-                'link_noads' => $data['link_noads']
+                'link_noads' => $data['link_noads'],
+                'pin' => $data['pin']
             ];
             $this->db->where('ID', $data['id']);
             $res = $this->db->update('tbl_file', $dataInsert);

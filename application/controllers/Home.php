@@ -11,6 +11,7 @@ class Home extends CI_Controller {
         $this->db->order_by('ID', 'DESC');
         $data['dataResult'] = $this->db->get('tbl_file', 10, 0)->result_array();
 
+        $this->db->order_by('pin', 'DESC');
         $this->db->order_by('count', 'DESC');
         $data['dataResultCount'] = $this->db->get('tbl_file')->result_array();
 
@@ -30,7 +31,8 @@ class Home extends CI_Controller {
                 'image' => $data['image'],
                 'count' => $data['count'],
                 'link_ads' => $data['link_ads'],
-                'link_noads' => $data['link_noads']
+                'link_noads' => $data['link_noads'],
+                'pin' => $data['pin']
             ];
             $res = $this->db->insert('tbl_file', $dataInsert);
             
@@ -60,7 +62,8 @@ class Home extends CI_Controller {
 		                'image' => $getData[0]['image'],
 		                'count' => $getData[0]['count'],
 		                'link_ads' => $getData[0]['link_ads'],
-		                'link_noads' => $getData[0]['link_noads']
+		                'link_noads' => $getData[0]['link_noads'],
+                        'pin' => $getData[0]['pin']
 	                ];
 
 	    $dataUpdate = [
@@ -88,7 +91,8 @@ class Home extends CI_Controller {
                             'image' => $value['image'],
                             'count' => $value['count'],
                             'link_ads' => $value['link_ads'],
-                            'link_noads' => $value['link_noads']
+                            'link_noads' => $value['link_noads'],
+                            'pin' => $value['pin']
                         ];
             }
         } else {
@@ -325,8 +329,8 @@ class Home extends CI_Controller {
                 $this->db->where('IP', $ip_client);
                 $this->db->update('tbl_spin', $dataUpdate);
             }
-            $random1 = rand(1,150);
-            $random2 = rand(1,150);
+            $random1 = rand(1,100);
+            $random2 = rand(1,100);
             $localtion = 0;
             $success = false;
             $key = '';
@@ -408,8 +412,8 @@ class Home extends CI_Controller {
                 $this->db->where('IP', $ip_client);
                 $this->db->update('tbl_spin', $dataUpdate);
             }
-            $random1 = rand(1,100);
-            $random2 = rand(1,100);
+            $random1 = rand(1,70);
+            $random2 = rand(1,70);
             $localtion = 0;
             $success = false;
             $key = '';

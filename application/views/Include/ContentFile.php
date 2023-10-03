@@ -112,9 +112,15 @@
 					<div class="__sort-count">
 						<i class="fa-regular fa-circle-down"></i> <?=$value['count']?>
 					</div>
-					<div class="__sort-action">
-						<i class="fa-solid fa-eye"></i>
-					</div>
+					<?php if($value['pin'] == 1) { ?>
+						<div class="__sort-action" style="color: #f00;">
+							<i class="fa-solid fa-thumbtack"></i>
+						</div>
+					<?php } else { ?>
+						<div class="__sort-action">
+							<i class="fa-solid fa-eye"></i>
+						</div>
+					<?php } ?>
 				</div>
 			</div>
 			<?php } ?>

@@ -38,6 +38,7 @@
 					<th>Name</th>
 					<th>Count</th>
 					<th>Link ads</th>
+					<th>Pin</th>
 					<th>Option</th>
 				</tr>
 			</thead>
@@ -49,6 +50,7 @@
 						<td><?=$value['name']?></td>
 						<td><?=$value['count']?></td>
 						<td><?=$value['link_ads']?></td>
+						<td><?=$value['pin']?></td>
 						<td>
 							<button class="btn btn-primary" onclick="showModalEdit(<?=$value['ID']?>); return false;">Sửa</button>
 							<button class="btn btn-danger" onclick="deleteRow(<?=$value['ID']?>); return false;">Xóa</button>
@@ -95,6 +97,10 @@
 				  	<span class="input-group-text" id="inputGroup-sizing-default">Link no ads</span>
 				  	<input id="link_noads" type="text" class="form-control">
 				</div>
+				<div class="input-group mb-3" style="margin-top: 15px;">
+				  	<span class="input-group-text" id="inputGroup-sizing-default">Pin</span>
+				  	<input id="pin" type="text" class="form-control">
+				</div>
 	      	</div>
 	      	<div class="modal-footer">
 	        	<button type="button" class="btn btn-primary" onclick="saveAjax(); return false;">Save</button>
@@ -136,6 +142,10 @@
 				  	<span class="input-group-text" id="inputGroup-sizing-default">Link no ads</span>
 				  	<input id="link_noadsedit" type="text" class="form-control">
 				</div>
+				<div class="input-group mb-3" style="margin-top: 15px;">
+				  	<span class="input-group-text" id="inputGroup-sizing-default">Pin</span>
+				  	<input id="pinedit" type="text" class="form-control">
+				</div>
 	      	</div>
 	      	<div class="modal-footer">
 	        	<button type="button" class="btn btn-primary" onclick="editAjax(); return false;">Save</button>
@@ -160,7 +170,8 @@
 	            image: $('#image').val(),
 	            count: $('#count').val(),
 	            link_ads: $('#link_ads').val(),
-	            link_noads: $('#link_noads').val()
+	            link_noads: $('#link_noads').val(),
+	            pin: $('#pin').val()
 	        }
 	    }).done(function(r) {
 	    	Swal.fire({
@@ -187,6 +198,7 @@
 	        $('#imageedit').val(r.image);
 	        $('#link_adsedit').val(r.link_ads);
 	        $('#link_noadsedit').val(r.link_noads);
+	        $('#pinedit').val(r.pin);
 	        $('#editModal').modal('show');
 	    });
 	}
@@ -203,7 +215,8 @@
 	            name: $('#nameedit').val(),
 	            image: $('#imageedit').val(),
 	            link_ads: $('#link_adsedit').val(),
-	            link_noads: $('#link_noadsedit').val()
+	            link_noads: $('#link_noadsedit').val(),
+	            pin: $('#pinedit').val()
 	        }
 	    }).done(function(r) {
 	    	Swal.fire({

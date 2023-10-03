@@ -23,7 +23,7 @@
 				<div class="__spin-header-title-note">
 					*Lượt quay sẽ được làm mới mỗi ngày.
 					<br>
-					*Nhận thêm 10 lượt quay bằng cách nhấn vào nút xem quảng cáo bên dưới và truy cập vào liên kết cuối cùng để nhận code. (Code có dạng: XXXXXXXXXX).
+					*Nhận thêm 10 lượt quay bằng cách nhấn vào nút xem quảng cáo bên dưới và truy cập vào liên kết cuối cùng để nhận code. (Tối đa 3 lần mỗi ngày).
 				</div>
 				<a href="<?=$dataResultList?>" class="__spin-header-button-ads" id="ads-get-code" target="_blank" onclick="create_code(); return false;">
 					Xem quảng cáo
@@ -83,13 +83,13 @@
 						</div>
 					<?php } else { ?>
 						<div class="__title-number-spin">
-							ĐỂ EVENT DIỄN RA LIÊN TỤC NÊN 1 KEY CÓ HẠN DÙNG 3 NGÀY.
+							ĐỂ EVENT DIỄN RA LIÊN TỤC NÊN 1 KEY CÓ HẠN DÙNG 7 NGÀY.
 							<br>
 							Số lượt quay còn lại: <span id="count_spin"><?=$dataResultCount?></span>.
                             <br>
-                            Tỉ lệ quay trúng: 1%. Dùng 30 lượt quay trong 1 lần sẽ nâng lên 5%.
+                            Tỉ lệ quay trúng: 2%. Dùng 30 lượt quay trong 1 lần sẽ nâng lên 10%.
                             <br>
-                            <input type="checkbox" id="check_30spin" style="width: 20px; height: 20px; margin-top: 5px; margin-right: 5px;"> DÙNG 30 LƯỢT QUAY TRONG 1 LẦN (Tăng tỉ lệ lên 5%)
+                            <input type="checkbox" id="check_30spin" style="width: 20px; height: 20px; margin-top: 5px; margin-right: 5px;"> DÙNG 30 LƯỢT QUAY TRONG 1 LẦN (Tăng tỉ lệ lên 10%)
                             <br>
                             <input type="checkbox" id="check_skip" style="width: 20px; height: 20px; margin-top: 5px; margin-right: 5px;"> BỎ QUA HOẠT ẢNH
 						</div>
@@ -3328,7 +3328,9 @@ function alertPrize(indicatedSegment) {
         Swal.fire({
             icon: 'success',
             title: 'WOW! WOW! WOW!',
-            text: message
+            allowOutsideClick: false,
+            showConfirmButton: false,
+            text: message + '(Reset lại trang nếu muốn đóng thông báo này!)'
         });
         $('.__list-member-table-tbody').append('<div class="__tbody-tr">\
                                                   <div class="__td" style="width: 60%;">\
