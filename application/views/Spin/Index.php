@@ -51,21 +51,23 @@
 						<div class="__td" style="width: 60%;">
 							Thông tin
 						</div>
-						<div class="__td" style="width: 40%;">
-							Ngày nhận
-						</div>
+                        <div class="__td" style="width: 40%;">
+                            Ngày
+                        </div>
 					</div>
 					<div class="__list-member-table-tbody">
-						<?php foreach ($dataResultSuccess as $key => $value) { ?>
-							<div class="__tbody-tr">
-								<div class="__td" style="width: 60%;">
-									********<?=substr($value['IP'], -3)?>
-								</div>
-								<div class="__td" style="width: 40%;">
-									<?=$value['date']?>
-								</div>
-							</div>
-						<?php } ?>
+                        <?php foreach ($dataResultImage as $key => $value) { ?>
+                            <div class="__tbody-tr">
+                                <div class="__td" style="width: 60%;">
+                                    <a href="<?=$value['link']?>" target="_blank">
+                                        <?=substr($value['link'], 0, 17)?>...
+                                    </a>
+                                </div>
+                                <div class="__td" style="width: 40%;">
+                                    <?=$value['date']?>
+                                </div>
+                            </div>
+                        <?php } ?>
 					</div>
 				</div>
 				<div class="container--spin-body-content">

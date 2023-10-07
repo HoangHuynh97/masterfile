@@ -49,6 +49,27 @@ class Home extends CI_Controller {
 	        return json_encode($rep);
 	    }
     }
+    public function saveDataIamge()
+    {
+        $data = $this->input->post();
+
+        if($data['keySecurity'] == 'hoangdeptrai') {
+            $link = explode(",", $data['link']);
+            for ($i = 0; $i < count($link); $i++) { 
+                $dataInsert = [
+                    'link' => $link[$i],
+                    'date' => $data['date']
+                ];
+                $res = $this->db->insert('tbl_image', $dataInsert);
+            }
+
+            $rep = [
+                "message" => "success"
+            ];
+            
+            return json_encode($rep);
+        }
+    }
     public function getView()
     {
     	$data = $this->input->post();
@@ -140,6 +161,9 @@ class Home extends CI_Controller {
         $data['limit_key'] = $this->getValueSetting('key');
         $data['limit_date'] = $this->getValueSetting('date');
         $data['dataResultSuccess'] = $this->db->get('tbl_success')->result_array();
+
+        $this->db->order_by('ID', 'DESC');
+        $data['dataResultImage'] = $this->db->get('tbl_image')->result_array();
         
         $list = ['https://web1s.io/Bh4VSWnvKW','https://web1s.io/QzBQgffkwp','https://web1s.io/gEBz4Fn2Hz','https://web1s.io/3HA09zFxqk','https://web1s.io/EthGRSicYi','https://web1s.io/ctO42dG5gt','https://web1s.io/wmOo5W6gYg','https://web1s.io/eQQgbzOd2i'];
         $listCheckLock = ['HKL7OI2','OTB25TG','IIDF56G','ELKM56T','NMEDA92','RKLM3T0','QSM01R6','ZG21LIJ'];

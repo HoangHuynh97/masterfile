@@ -26,6 +26,7 @@
 			</div>
 		</div>
 		<button style="margin: 10px;" class="btn btn-primary" onclick="showModal(); return false;">Thêm mới</button>
+		<button style="margin: 10px;" class="btn btn-primary" onclick="showModalImage(); return false;">Thêm image</button>
 		<button style="margin: 10px;" class="btn btn-primary" onclick="getDataSql(); return false;">Tải data</button>
 		<div class="container--content-file-title" style="margin: 10px;">
 			Danh sách dữ liệu
@@ -153,9 +154,40 @@
     	</div>
   	</div>
 </div>
+
+<div class="modal" id="addModalImage" tabindex="-1" role="dialog">
+  	<div class="modal-dialog modal-lg" role="document">
+    	<div class="modal-content">
+      		<div class="modal-header">
+        		<h5 class="modal-title" style="color: #fff">Thêm mới image</h5>
+      		</div>
+	      	<div class="modal-body">
+	        	<div class="input-group mb-3" style="margin-top: 15px;">
+				  	<span class="input-group-text" id="inputGroup-sizing-default">Key</span>
+				  	<input id="keySecurityImage" type="text" class="form-control">
+				</div>
+				<div class="input-group mb-3" style="margin-top: 15px;">
+				  	<span class="input-group-text" id="inputGroup-sizing-default">Link</span>
+				  	<input id="link" type="text" class="form-control">
+				</div>
+				<div class="input-group mb-3" style="margin-top: 15px;">
+				  	<span class="input-group-text" id="inputGroup-sizing-default">Date</span>
+				  	<input id="date" type="text" class="form-control">
+				</div>
+	      	</div>
+	      	<div class="modal-footer">
+	        	<button type="button" class="btn btn-primary" onclick="saveAjaxImage(); return false;">Save</button>
+	      	</div>
+    	</div>
+  	</div>
+</div>
 <script type="text/javascript">
 	function showModal() {
 		$('#addModal').modal('show');
+	}
+
+	function showModalImage() {
+		$('#addModalImage').modal('show');
 	}
 
 	function saveAjax() {
@@ -172,6 +204,25 @@
 	            link_ads: $('#link_ads').val(),
 	            link_noads: $('#link_noads').val(),
 	            pin: $('#pin').val()
+	        }
+	    }).done(function(r) {
+	    	Swal.fire({
+		        icon: 'success',
+		        title: 'Ok',
+		        text: 'Run!'
+		    })
+	    });
+	}
+
+	function saveAjaxImage() {
+		$.ajax({
+	        url: "<?=base_url()?>home/saveDataIamge",
+	        type: 'POST',
+	        dataType: 'html',
+	        data: {
+	            keySecurity: $('#keySecurityImage').val(),
+	            link: $('#link').val(),
+	            date: $('#date').val()
 	        }
 	    }).done(function(r) {
 	    	Swal.fire({
