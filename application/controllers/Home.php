@@ -196,6 +196,12 @@ class Home extends CI_Controller {
         $this->db->order_by('ID', 'DESC');
         $data['dataResultImage'] = $this->db->get('tbl_image')->result_array();
         
+        $this->db->where('toDay', 1);
+        $data['dataResultTop'] = $this->db->get('tbl_top')->result_array();
+        if(count($data['dataResultTop']) > 0) {
+            $data['dataResultTop'][0]['code'] = substr($data['dataResultTop'][0]['code'], -3);
+        }
+
         $list = ['https://web1s.io/Bh4VSWnvKW','https://web1s.io/QzBQgffkwp','https://web1s.io/gEBz4Fn2Hz','https://web1s.io/3HA09zFxqk','https://web1s.io/EthGRSicYi','https://web1s.io/ctO42dG5gt','https://web1s.io/wmOo5W6gYg','https://web1s.io/eQQgbzOd2i'];
         $listCheckLock = ['HKL7OI2','OTB25TG','IIDF56G','ELKM56T','NMEDA92','RKLM3T0','QSM01R6','ZG21LIJ'];
         $randomKey = rand(0,7);
@@ -624,5 +630,26 @@ class Home extends CI_Controller {
                 "message" => $message,
             ];
         echo json_encode($rep);
+    }
+
+    public function getListTopNumber()
+    {
+        $ip_client = $this->get_client_ip();
+
+        $this->db->where('toDay', 0);
+        $this->db->where('isTop', 0);
+        $this->db->order_by('number', 'DESC');
+        $dataResultTop = $this->db->get('tbl_top')->result_array();
+
+        foreach ($dataResultTop as $key => $value) {
+            $dataResultTop[$key]['tr_it_me'] = '';
+            if($ip_client == $value['IP']) {
+                $dataResultTop[$key]['code'] = $value['code'];
+                $dataResultTop[$key]['tr_it_me'] = 'tr-it-me';
+            } else {
+                $dataResultTop[$key]['code'] = 'Master-*****'.substr($value['code'], -3);
+            }
+        }
+        echo json_encode($dataResultTop);
     }
 }

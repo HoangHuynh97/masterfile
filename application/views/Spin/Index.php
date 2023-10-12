@@ -145,10 +145,57 @@
             <div class="modal-header">
                 <h5 class="modal-title">Danh sách con số may mắn</h5>
             </div>
-            <div class="modal-body">
-                <div class="input-group mb-3" style="margin-top: 15px;">
-                    <span class="input-group-text" id="inputGroup-sizing-default">Key</span>
-                    <input id="keySecurity" type="text" class="form-control">
+            <div class="modal-body row">
+                <div class="col-12 __title-number-spin">
+                    *Thực hiện 40 lần quay sẽ nhận được 1 số ngẫu nhiên, người có số lớn nhất sẽ nhận được key.
+                    <br>
+                    *Thời gian tổng kết: 19h00 hằng ngày. Người chiến thắng vui lòng gửi mã định danh cho mình trước kỳ tổng kết tiếp theo, nếu không mã sẽ mất và mình sẽ không giải quyết.
+                </div>
+                <div class="line-spin"></div>
+                <div class="col-12">
+                    <div class="text-center margin-top-10px">
+                        <span style="color: red; font-size: 20px; font-weight: bold;">Người chiến thắng kỳ trước</span>
+                    </div>
+                    <div class="text-center">
+                        <?php if(count($dataResultTop) > 0) { ?>
+                            <span style="font-size: 14px; font-weight: bold;">
+                                Master-******<?=$dataResultTop[0]['code']?> - 
+                                <span style="color: red;">
+                                    <?=$dataResultTop[0]['number']?> điểm
+                                </span>
+                            </span>
+                        <?php } else { ?>
+                            <span style="font-size: 14px; font-weight: bold; opacity: 0.5;">
+                                Chưa có dữ liệu!
+                            </span>
+                        <?php } ?>
+                    </div>
+                    <div class="text-center margin-top-20px">
+                        <span>=/\=</span>
+                        <br>
+                        <span>===========</span>
+                        <br>
+                        <span>=\/=</span>
+                    </div>
+                    <div class="text-center margin-top-20px">
+                        <span style="color: red; font-size: 20px; font-weight: bold;">Danh sách kỳ này</span>
+                    </div>
+                    <table class="table table-hover margin-top-10px">
+                        <thead>
+                            <tr>
+                                <th scope="col">STT</th>
+                                <th scope="col">Thông tin</th>
+                                <th scope="col">Số điểm</th>
+                            </tr>
+                        </thead>
+                        <tbody id="content-top-number">
+                            <tr>
+                                <th>1</th>
+                                <td>Mark</td>
+                                <td>Otto</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
             <div class="modal-footer">
@@ -3414,7 +3461,7 @@ function create_code() {
     });
 }
 function submit_code() {
-        $.ajax({
+    $.ajax({
         url: "<?=base_url()?>home/submit_code",
         type: 'POST',
         dataType: 'html',
@@ -3440,7 +3487,30 @@ function submit_code() {
 }
 
 function getViewNumber() {
-    $('#viewModalNumber').modal('show');
+    $.ajax({
+        url: "<?=base_url()?>home/getListTopNumber",
+        type: 'POST',
+        dataType: 'html',
+        data: {}
+    }).done(function(r) {
+        r = JSON.parse(r);
+        var html = '';
+        for (var i = 0; i < r.length; i++) {
+            html += '<tr class="'+r[i].tr_it_me+'">\
+                        <td>';
+            if(i == 0) {
+                html += '<img style="width: 30px;" src="<?=base_url("assets/images/king.png")?>">';
+            } else {
+                html += i + 1;
+            }
+            html +=     '</td>\
+                        <td>'+r[i].code+'</td>\
+                        <td>'+r[i].number+' điểm</td>\
+                    </tr>';
+        }
+        $('#content-top-number').html(html);
+        $('#viewModalNumber').modal('show');
+    });
 }
 
 function closeModel() {
