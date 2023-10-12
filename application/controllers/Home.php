@@ -132,9 +132,38 @@ class Home extends CI_Controller {
         if($dataResultCount[0]['date'] != $current_date) {
             $dataUpdate = [
                 'date' => $current_date,
-                'spin' => 10
+                'spin' => 10,
+                'count_spin' => 0
             ];
             $this->db->update('tbl_spin', $dataUpdate);
+        }
+    }
+
+    public function resetTopNumber()
+    {
+        $this->db->order_by('number', 'DESC');
+        $this->db->where('isTop', 0);
+        $this->db->limit(5);
+        $dataResultCount = $this->db->get('tbl_top')->result_array();
+
+        if(count($dataResultCount) > 0) {
+            $dataUpdate = [
+                'isTop' => 1
+            ];
+            $this->db->where('ID', $dataResultCount[0]['ID']);
+            $this->db->update('tbl_top', $dataUpdate);
+
+            $this->db->where('isTop', 0);
+            $this->db->delete('tbl_top');
+
+            $this->db->where('toDay', 1);
+            $this->db->delete('tbl_top');
+
+            $dataUpdatetoDay = [
+                'toDay' => 1
+            ];
+            $this->db->where('ID', $dataResultCount[0]['ID']);
+            $this->db->update('tbl_top', $dataUpdatetoDay);
         }
     }
 
@@ -160,6 +189,8 @@ class Home extends CI_Controller {
         //change this
         $data['limit_key'] = $this->getValueSetting('key');
         $data['limit_date'] = $this->getValueSetting('date');
+
+        $this->db->order_by('ID', 'DESC');
         $data['dataResultSuccess'] = $this->db->get('tbl_success')->result_array();
 
         $this->db->order_by('ID', 'DESC');
@@ -346,9 +377,11 @@ class Home extends CI_Controller {
             $this->db->where('IP', $ip_client);
             $checkDataSpin = $this->db->get('tbl_spin')->result_array();
             $countSpin = $checkDataSpin[0]['spin'] - 1;
+            $countSpinIsGoing = $checkDataSpin[0]['count_spin'] + 1;
             if($countSpin >= 0) {
                 $dataUpdate = [
-                    'spin' => $countSpin
+                    'spin' => $countSpin,
+                    'count_spin' => $countSpinIsGoing
                 ];
                 $this->db->where('IP', $ip_client);
                 $this->db->update('tbl_spin', $dataUpdate);
@@ -384,12 +417,62 @@ class Home extends CI_Controller {
                     'key_security' => $key
                 ];
                 $this->db->insert('tbl_success', $dataInsertKey);
+
+                $dataUpdateCountSpin = [
+                    'count_spin' => 0
+                ];
+                $this->db->where('IP', $ip_client);
+                $this->db->update('tbl_spin', $dataUpdateCountSpin);
             } else {
-                $localtion = rand(1,10);
-                $success = false;
-                $key = '';
-                $spin = $countSpin < 0 ? 0 : $countSpin;
-                $message = 'Tạch Tạch Tạch Tạch Tạch Tạch!';
+                $this->db->where('IP', $ip_client);
+                $this->db->where('isTop', 0);
+                $CheckExistsTop = $this->db->get('tbl_top')->result_array();
+
+                if(count($CheckExistsTop) == 0) {
+                    if ($countSpinIsGoing >= 40) {
+                        $numberTop = rand(1,100);
+                        $codeTop = 'Master-'.$this->generateRandomString();
+
+                        $this->db->select_max('number');
+                        $this->db->where('isTop', 0);
+                        $queryCheckTop = $this->db->get('tbl_top')->result_array();
+                        if(count($queryCheckTop) > 0) {
+                            if ($queryCheckTop[0]['number'] == $numberTop) {
+                                $numberTop = $numberTop - 1;
+                            }
+                        }
+
+                        date_default_timezone_set('Asia/Ho_Chi_Minh');
+                        $timestamp = time();
+                        $current_date_top = date("Y-m-d", $timestamp);
+                        $dataInsertNumber = [
+                            'IP' => $ip_client,
+                            'code' => $codeTop,
+                            'number' => $numberTop,
+                            'date' => $current_date_top,
+                            'isTop' => 0
+                        ];
+                        $this->db->insert('tbl_top', $dataInsertNumber);
+
+                        $localtion = rand(1,10);
+                        $success = false;
+                        $key = $codeTop;
+                        $spin = $countSpin < 0 ? 0 : $countSpin;
+                        $message = $numberTop;
+                    } else {
+                        $localtion = rand(1,10);
+                        $success = false;
+                        $key = '';
+                        $spin = $countSpin < 0 ? 0 : $countSpin;
+                        $message = 'Tạch Tạch Tạch Tạch Tạch Tạch!';
+                    }
+                } else {
+                    $localtion = rand(1,10);
+                    $success = false;
+                    $key = '';
+                    $spin = $countSpin < 0 ? 0 : $countSpin;
+                    $message = 'Tạch Tạch Tạch Tạch Tạch Tạch!';
+                }
             }
         } else {
             $localtion = rand(1,10);
@@ -429,9 +512,11 @@ class Home extends CI_Controller {
             $this->db->where('IP', $ip_client);
             $checkDataSpin = $this->db->get('tbl_spin')->result_array();
             $countSpin = $checkDataSpin[0]['spin'] - 30;
+            $countSpinIsGoing = $checkDataSpin[0]['count_spin'] + 30;
             if($countSpin >= 0) {
                 $dataUpdate = [
-                    'spin' => $countSpin
+                    'spin' => $countSpin,
+                    'count_spin' => $countSpinIsGoing
                 ];
                 $this->db->where('IP', $ip_client);
                 $this->db->update('tbl_spin', $dataUpdate);
@@ -467,12 +552,62 @@ class Home extends CI_Controller {
                     'key_security' => $key
                 ];
                 $this->db->insert('tbl_success', $dataInsertKey);
+
+                $dataUpdateCountSpin = [
+                    'count_spin' => 0
+                ];
+                $this->db->where('IP', $ip_client);
+                $this->db->update('tbl_spin', $dataUpdateCountSpin);
             } else {
-                $localtion = rand(1,10);
-                $success = false;
-                $key = '';
-                $spin = $countSpin < 0 ? 0 : $countSpin;
-                $message = 'Tạch Tạch Tạch Tạch Tạch Tạch!';
+                $this->db->where('IP', $ip_client);
+                $this->db->where('isTop', 0);
+                $CheckExistsTop = $this->db->get('tbl_top')->result_array();
+
+                if(count($CheckExistsTop) == 0) {
+                    if ($countSpinIsGoing >= 40) {
+                        $numberTop = rand(1,100);
+                        $codeTop = 'Master-'.$this->generateRandomString();
+
+                        $this->db->select_max('number');
+                        $this->db->where('isTop', 0);
+                        $queryCheckTop = $this->db->get('tbl_top')->result_array();
+                        if(count($queryCheckTop) > 0) {
+                            if ($queryCheckTop[0]['number'] == $numberTop) {
+                                $numberTop = $numberTop - 1;
+                            }
+                        }
+
+                        date_default_timezone_set('Asia/Ho_Chi_Minh');
+                        $timestamp = time();
+                        $current_date_top = date("Y-m-d", $timestamp);
+                        $dataInsertNumber = [
+                            'IP' => $ip_client,
+                            'code' => $codeTop,
+                            'number' => $numberTop,
+                            'date' => $current_date_top,
+                            'isTop' => 0
+                        ];
+                        $this->db->insert('tbl_top', $dataInsertNumber);
+
+                        $localtion = rand(1,10);
+                        $success = false;
+                        $key = $codeTop;
+                        $spin = $countSpin < 0 ? 0 : $countSpin;
+                        $message = $numberTop;
+                    } else {
+                        $localtion = rand(1,10);
+                        $success = false;
+                        $key = '';
+                        $spin = $countSpin < 0 ? 0 : $countSpin;
+                        $message = 'Tạch Tạch Tạch Tạch Tạch Tạch!';
+                    }
+                } else {
+                    $localtion = rand(1,10);
+                    $success = false;
+                    $key = '';
+                    $spin = $countSpin < 0 ? 0 : $countSpin;
+                    $message = 'Tạch Tạch Tạch Tạch Tạch Tạch!';
+                }
             }
         } else {
             $localtion = rand(1,10);

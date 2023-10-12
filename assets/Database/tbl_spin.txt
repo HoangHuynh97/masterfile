@@ -1,0 +1,1 @@
+ALTER TABLE `tbl_spin` ADD `count_spin` INT NOT NULL DEFAULT '0' AFTER `spin`;

@@ -85,11 +85,13 @@
 						</div>
 					<?php } else { ?>
 						<div class="__title-number-spin">
-							ĐỂ EVENT DIỄN RA LIÊN TỤC NÊN 1 KEY CÓ HẠN DÙNG 7 NGÀY.
-							<br>
-							Số lượt quay còn lại: <span id="count_spin"><?=$dataResultCount?></span>.
-                            <br>
-                            Tỉ lệ quay trúng: 2%. Dùng 30 lượt quay trong 1 lần sẽ nâng lên 10%.
+                            <div class="__title-container-button">
+                                <div class="__spin-header-button-ads button w-content" onclick="getViewNumber(); return false;">
+                                    DANH SÁCH CON SỐ MAY MẮN
+                                    <img class="__title-container-button-image" src="<?=base_url("assets/images/king.png")?>">
+                                </div>
+                            </div>
+							Tỉ lệ quay trúng: 2%, số lượt quay còn lại: <span id="count_spin"><?=$dataResultCount?></span>.
                             <br>
                             <input type="checkbox" id="check_30spin" style="width: 20px; height: 20px; margin-top: 5px; margin-right: 5px;"> DÙNG 30 LƯỢT QUAY TRONG 1 LẦN (Tăng tỉ lệ lên 10%)
                             <br>
@@ -136,6 +138,25 @@
 <a href="<?=base_url()?>" class="event-get-key">
   Trang chủ
 </a>
+
+<div class="modal fade" id="viewModalNumber" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Danh sách con số may mắn</h5>
+            </div>
+            <div class="modal-body">
+                <div class="input-group mb-3" style="margin-top: 15px;">
+                    <span class="input-group-text" id="inputGroup-sizing-default">Key</span>
+                    <input id="keySecurity" type="text" class="form-control">
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" onclick="closeModel(); return false;">Đóng</button>
+            </div>
+        </div>
+    </div>
+</div>
 <script type="text/javascript">
 // vòng quay
 
@@ -3321,11 +3342,43 @@ function startSpin() {
 }
 function alertPrize(indicatedSegment) {
     if(success == false) {
-        Swal.fire({
-            icon: 'error',
-            title: 'Hãy thử lại!',
-            text: message
-        })
+        if(key == '') {
+            Swal.fire({
+                icon: 'error',
+                title: 'Hãy thử lại!',
+                text: message
+            })
+        } else {
+            Swal.fire({
+                title: 'Mã định danh của bạn là: <u>'+key+'</u>',
+                html:'<div style="color: red;">Nó chứng minh bạn là chủ sở hữu con số, không giải quyết bất cứ trường hợp nào làm mất, quên.</div>\
+                    <div style="color: red; font-size: 100px; font-weight: bold;" class="valueAkhi" akhi="'+message+'">0</div>',
+                confirmButtonText: 'Xem danh sách',
+                allowOutsideClick: false,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    getViewNumber();
+                }
+            })
+
+            const counters = document.querySelectorAll('.valueAkhi');
+            const speed = 200;
+            counters.forEach( counter => {
+                const animate = () => {
+                    const value = +counter.getAttribute('akhi');
+                    const data = +counter.innerText;
+                 
+                    const time = value / speed;
+                    if(data < value) {
+                        counter.innerText = Math.ceil(data + time);
+                        setTimeout(animate, 1);
+                    } else {
+                        counter.innerText = value;
+                    }
+                }
+                animate();
+            });
+        }
     } else {
         Swal.fire({
             icon: 'success',
@@ -3384,6 +3437,14 @@ function submit_code() {
             $('#count_spin').html(c);
         }
     });
+}
+
+function getViewNumber() {
+    $('#viewModalNumber').modal('show');
+}
+
+function closeModel() {
+    $('#viewModalNumber').modal('hide');
 }
 // end
 </script>

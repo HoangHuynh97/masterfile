@@ -47,12 +47,6 @@ a {
     float: right;
 }
 
-.modal-header {
-    background: url(../images/bg-modal.jpg);
-    background-size: cover;
-    background-position: center;
-}
-
 #particles-js {
     position: absolute;
     display: -webkit-box;
@@ -806,3 +800,35 @@ body.swal2-height-auto {
     margin-bottom: 15px;
 }
 /*====end====*/
+
+/*New v2*/
+.__title-container-button {
+    width: 100%;
+    display: -webkit-box;
+    display: -ms-flexbox;
+    display: flex;
+    -webkit-box-pack: center;
+        -ms-flex-pack: center;
+            justify-content: center;
+    -webkit-box-align: center;
+        -ms-flex-align: center;
+            align-items: center;
+}
+.w-content {
+    position: relative;
+    width: fit-content;
+}
+.__title-container-button-image {
+    position: absolute;
+    width: 30px;
+    right: 10px;
+    top: -5px;
+    -webkit-transform: rotate(45deg);
+    -ms-transform: rotate(45deg);
+    transform: rotate(45deg);
+}
+.button {
+    cursor: pointer;
+    user-select: none;
+}
+/*end*/
